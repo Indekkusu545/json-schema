@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.com/flutter_flavorizr.schema.json",
+  "title": "Flutter Flavorizr Configuration Schema",
+  "description": "JSON Schema for flutter_flavorizr configuration fields (typically used in flavorizr.yaml)",
+  "type": "object",
+  "properties": {
+    "app": {
+      "type": "object",
+      "description": "An object describing the general capabilities of an app",
+      "properties": {
+        "android": {
+          "type": "object",
+          "properties": {
+            "flavorDimensions": {
+              "type": "string",
+              "default": "flavor-type",
+              "description": "The value of the flavorDimensions in the android build.gradle file"
+            },
+            "resValues": {
+              "type": "object",
+              "description": "An object which contains a set of resValues configurations",
+              "additionalProperties": {
+                "$ref": "#/$defs/resValue"
+              }
+            },
+            "buildConfigFields": {
+              "type": "object",
+              "description": "An object which contains a set of buildConfigFields configurations",
+              "additionalProperties": {
+                "$ref": "#/$defs/buildConfigField"
+              }
+            }
+          }
+        },
+        "ios": {
+          "type": "object",
+          "properties": {
+            "buildSettings": {
+              "type": "object",
+              "description": "An XCode build configuration dictionary"
+            }
+          }
+        },
+        "macos": {
+          "type": "object",
+          "properties": {
+            "buildSettings": {
+              "type": "object",
+              "description": "An XCode build configuration dictionary"
+            }
+          }
+        }
+      }
+    },
+    "flavors": {
+      "type": "object",
+      "description": "An object (dictionary) where each key is a flavor name and the value describes a flavor configuration",
+      "patternProperties": {
+        "^[a-zA-Z0-9_]+$": {
+          "$ref": "#/$defs/flavor"
+        }
+      },
+      "additionalProperties": false
+    },
+    "instructions": {
+      "type": "array",
+      "description": "An array of instructions to customize the flavorizr process",
+      "items": {
+        "type": "string"
+      }
+    },
+    "assetsUrl": {
+      "type": "string",
+      "description": "A string containing the URL of the zip assets file. The default points to the current release"
+    },
+    "ide": {
+      "description": "The IDE in which the app is being developed. Currently only vscode or idea",
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": ["vscode", "idea"]
+        },
+        {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["vscode", "idea"]
+          }
+        }
+      ]
+    }
+  },
+  "required": ["flavors"],
+  "$defs": {
+    "flavor": {
+      "type": "object",
+      "properties": {
+        "app": {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "The name of the App"
+            },
+            "icon": {
+              "type": "string",
+              "description": "The icon path for this flavor"
+            }
+          },
+          "required": ["name"]
+        },
+        "android": {
+          "type": "object",
+          "properties": {
+            "applicationId": {
+              "type": "string",
+              "description": "The applicationId of the Android App"
+            },
+            "firebase": {
+              "$ref": "#/$defs/firebase"
+            },
+            "agconnect": {
+              "$ref": "#/$defs/agconnect"
+            },
+            "resValues": {
+              "type": "object",
+              "description": "An array/object which contains a set of resValues configurations",
+              "additionalProperties": {
+                "$ref": "#/$defs/resValue"
+              }
+            },
+            "buildConfigFields": {
+              "type": "object",
+              "description": "An array/object which contains a set of buildConfigFields configurations",
+              "additionalProperties": {
+                "$ref": "#/$defs/buildConfigField"
+              }
+            },
+            "customConfig": {
+              "type": "object",
+              "description": "An array/object which contains a set of custom configs, overrides defaultConfig"
+            },
+            "generateDummyAssets": {
+              "type": "boolean",
+              "default": true,
+              "description": "True if you want to generate dummy assets (icon set, strings, etc)"
+            },
+            "icon": {
+              "type": "string",
+              "description": "The icon path for this android flavor"
+            },
+            "adaptiveIcon": {
+              "type": "object",
+              "description": "An object which contains foreground, background, monochrome (optional) of adaptive icon",
+              "properties": {
+                "foreground": {
+                  "type": "string"
+                },
+                "background": {
+                  "type": "string"
+                },
+                "monochrome": {
+                  "type": "string"
+                }
+              },
+              "required": ["foreground", "background"]
+            }
+          },
+          "required": ["applicationId"]
+        },
+        "ios": {
+          "type": "object",
+          "properties": {
+            "bundleId": {
+              "type": "string",
+              "description": "The bundleId of the iOS App"
+            },
+            "buildSettings": {
+              "type": "object",
+              "description": "A flavor-specific XCode build configuration dictionary"
+            },
+            "firebase": {
+              "$ref": "#/$defs/firebase"
+            },
+            "variables": {
+              "type": "object",
+              "description": "An array/object which contains a set of variables configurations",
+              "additionalProperties": {
+                "$ref": "#/$defs/variable"
+              }
+            },
+            "generateDummyAssets": {
+              "type": "boolean",
+              "default": true,
+              "description": "True if you want to generate dummy assets (xcassets, etc)"
+            },
+            "icon": {
+              "type": "string",
+              "description": "The icon path for this iOS flavor"
+            }
+          },
+          "required": ["bundleId"]
+        },
+        "macos": {
+          "type": "object",
+          "properties": {
+            "bundleId": {
+              "type": "string",
+              "description": "The bundleId of the macOS App"
+            },
+            "buildSettings": {
+              "type": "object",
+              "description": "A flavor-specific XCode build configuration dictionary"
+            },
+            "firebase": {
+              "$ref": "#/$defs/firebase"
+            },
+            "variables": {
+              "type": "object",
+              "description": "An array/object which contains a set of variables configurations",
+              "additionalProperties": {
+                "$ref": "#/$defs/variable"
+              }
+            },
+            "generateDummyAssets": {
+              "type": "boolean",
+              "default": true,
+              "description": "True if you want to generate dummy assets (xcassets, etc)"
+            },
+            "icon": {
+              "type": "string",
+              "description": "The icon path for this macOS flavor"
+            }
+          },
+          "required": ["bundleId"]
+        }
+      }
+    },
+    "resValue": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of the resValue variable"
+        },
+        "value": {
+          "type": "string",
+          "description": "The value of the resValue variable"
+        }
+      },
+      "required": ["type", "value"]
+    },
+    "buildConfigField": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "The type of the buildConfigField variable"
+        },
+        "value": {
+          "type": "string",
+          "description": "The value of the buildConfigField variable"
+        }
+      },
+      "required": ["type", "value"]
+    },
+    "variable": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "string",
+          "description": "The type of the target (debug, release, profile). Do not specify a target if you want to apply it to all of them."
+        },
+        "value": {
+          "type": "string",
+          "description": "The value of the variable"
+        }
+      },
+      "required": ["value"]
+    },
+    "firebase": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "string",
+          "description": "The path to the Firebase configuration file"
+        }
+      },
+      "required": ["config"]
+    },
+    "agconnect": {
+      "type": "object",
+      "properties": {
+        "config": {
+          "type": "string",
+          "description": "The path to the AGConnect configuration file"
+        }
+      },
+      "required": ["config"]
+    }
+  }
+}
