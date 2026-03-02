@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.com/flutter_flavorizr.schema.json",
+  "$id": "https://github.com/Indekkusu545/json-schema/blob/main/flutter_flavorizr.schema.json",
   "title": "Flutter Flavorizr Configuration Schema",
   "description": "JSON Schema for flutter_flavorizr configuration fields (typically used in flavorizr.yaml)",
   "type": "object",
